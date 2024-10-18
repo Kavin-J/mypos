@@ -1,0 +1,18 @@
+# dir stucture
+/src
+  ├── /app
+  │   ├── store.js           # สร้าง store ของ Redux Toolkit
+  │   └── rootReducer.js     # รวม reducers ทั้งหมดจากแต่ละ feature
+  ├── /features
+  │   ├── /counter
+  │   │   ├── counterSlice.js  # สร้าง slice สำหรับฟีเจอร์ counter
+  │   │   ├── Counter.js       # UI component ของ counter
+  │   │   └── Counter.css      # Style เฉพาะของฟีเจอร์นี้
+  │   └── /user
+  │       ├── userSlice.js     # สร้าง slice สำหรับฟีเจอร์ user
+  │       ├── UserProfile.js   # UI component สำหรับโปรไฟล์ของผู้ใช้
+  │       └── UserProfile.css  # Style เฉพาะของฟีเจอร์นี้
+  ├── /components              # Components ที่ใช้ซ้ำทั่วทั้งแอป
+  ├── /utils                   # Utilities ต่าง ๆ ที่ใช้ในโปรเจกต์
+  ├── App.js                   # ไฟล์หลักของแอปพลิเคชัน
+  └── index.js                 # ไฟล์เริ่มต้นของแอป

@@ -1,26 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./styles/App.css";
+import SideNav from "./components/sidenav/SideNav";
+import Rest from "./components/Restcode";
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
+import path from "path";
+import Counter from "./app/features/counter/Counter";
+import UserProfile from "./app/features/user/UserProfile";
+import RootLayout from "./components/RootLayout";
+import ErrorPage from "./components/ErrorPage";
+import Homepage from "./components/home/Homepage";
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: (<RootLayout />),
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                path: '/',
+                element: (<Homepage />),
+
+            },
+            {
+                path: 'posc',
+                element: (<Counter />)
+            },
+            {
+                path: 'user',
+                element: (<UserProfile />)
+            }
+        ]
+
+    },
+    {
+        path: '/login',
+        element: (<div className="flex  justify-center items-center"><h5>Login</h5></div>)
+    },
+
+
+])
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    return (
+        <div className="w-screen h-screen overflow-hidden">
+
+            <RouterProvider router={router} />
+        </div>
+
+
+    );
 }
 
 export default App;
