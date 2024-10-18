@@ -6,10 +6,10 @@ module.exports = {
 
             colors: {
 
-                "nav-primary": "#000000",
+
 
             }
         },
     },
-    plugins: [],
+    plugins: [require('tailwind-scrollbar'),],
 };
