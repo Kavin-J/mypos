@@ -1,7 +1,6 @@
 import React from "react";
 import "./styles/App.css";
 import SideNav from "./components/sidenav/SideNav";
-import Rest from "./components/Restcode";
 import {
     createBrowserRouter,
     RouterProvider,
@@ -12,6 +11,9 @@ import UserProfile from "./app/features/user/UserProfile";
 import RootLayout from "./components/RootLayout";
 import ErrorPage from "./components/ErrorPage";
 import Homepage from "./components/home/Homepage";
+import Login from "./components/loginPage/Login";
+import ProtectedRoute from "./components/ProtectRoute";
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -20,15 +22,15 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: (<Homepage />),
+                element: (<ProtectedRoute ><Homepage /></ProtectedRoute>),
 
             },
             {
-                path: 'posc',
+                path: 'dashboard',
                 element: (<Counter />)
             },
             {
-                path: 'user',
+                path: 'store',
                 element: (<UserProfile />)
             }
         ]
@@ -36,7 +38,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/login',
-        element: (<div className="flex  justify-center items-center"><h5>Login</h5></div>)
+        element: (<Login />)
     },
 
 

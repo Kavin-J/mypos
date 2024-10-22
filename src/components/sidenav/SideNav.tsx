@@ -1,145 +1,117 @@
 import React, { useState } from "react";
 import { closeFullscreen, openFullscreen } from "../../utils";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+import { logout } from "../../app/features/auth/authSlice";
+import { BuildingStorefrontIcon, ChartPieIcon, Square3Stack3DIcon, Squares2X2Icon } from '@heroicons/react/24/solid';
 
 type Props = {};
+interface NavMmenu {
+    name: string;
+    href: string;
+    icon: JSX.Element;
+    disable?: boolean;
+}
+
+const navMenu: NavMmenu[] = [
+    { name: 'POS', href: '/', icon: <Squares2X2Icon className="w-8 h-8" /> },
+    { name: 'Dashboard', href: '/dashboard', icon: <ChartPieIcon className="w-8 h-8" /> },
+    { name: 'Store', href: '/store', icon: <BuildingStorefrontIcon className="w-8 h-8" /> },
+    { name: 'Management', href: '/management', icon: <Square3Stack3DIcon className="w-8 h-8" />, disable: true },
+];
 
 function SideNav({ }: Props) {
     const [fullScreen, setFullScreen] = useState(false);
-    const handleScreen = (state: boolean) => {
-        if (state) {
+    const dispatch = useDispatch<AppDispatch>();
+
+    const handleScreen = () => {
+        if (!fullScreen) {
             openFullscreen();
-        }
-        if (!state) {
+        } else {
             closeFullscreen();
         }
-        setFullScreen(!state);
+        setFullScreen(!fullScreen);
     };
+    const [isSidebarOpen, setSidebarOpen] = useState(true); // Sidebar toggle state
+    const toggleSidebar = () => {
+        setSidebarOpen(!isSidebarOpen); // Toggle sidebar state
+    };
+
+    const handleSignout = () => dispatch(logout());
+
     return (
-        <aside
-            id="default-sidebar"
-            className=" w-20 h-screen transition-transform "
-            aria-label="Sidebar"
-        >
-            <div className="flex flex-col justify-between h-full px-3 py-4 overflow-y-auto bg-nav-primary ">
-                <ul aria-describedby="logo" className="space-y-2 font-medium">
-                    <li>
-                        <button
-                            onClick={() => handleScreen(fullScreen)}
-                            className="flex flex-col justify-center items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        >
-                            <svg
-                                className="w-10 h-10 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 22 21"
+        <>
+
+            <aside
+                id="default-sidebar"
+                className={`absolute transition-transform duration-500 w-28 h-screen bg-gradient-to-b  from-indigo-500 from-10% via-sky-500 via-60% to-emerald-500 to-90% text-white flex flex-col justify-between shadow-lg ${isSidebarOpen ? '-translate-x-0 ' : '-translate-x-full  '}`}
+                aria-label="Sidebar"
+            >
+                <div className="flex flex-col justify-between h-full px-3 py-6 space-y-6">
+                    {/* Logo or Dashboard Icon */}
+                    <div className="flex justify-center items-center">
+                        <button className="relative flex flex-col justify-center items-center p-2 text-gray-200 hover:bg-blue-700 rounded-lg transition-all duration-200">
+
+                            <span className="mt-2 text-4xl hidden lg:block">Logo</span>
+                            <button
+                                onClick={toggleSidebar}
+                                className="absolute z-50 top-0 -right-10 h-32 w-7 transform  bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 shadow-lg transition-transform duration-300"
+                            // Adjust margin based on sidebar state
                             >
-                                <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                                <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-                            </svg>
-                            <span className="ms-3 hidden">Dashboard</span>
+                                {isSidebarOpen ? 'Close' : 'Open'}
+                            </button>
                         </button>
-                    </li>
-                </ul>
-                <ul className="mt-5 space-y-5 flex-1 font-medium">
-                    <li>
-                        <Link 
-                            to="/"
-                            className="flex flex-col justify-center items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                    </div>
+
+                    {/* Navigation Menu */}
+                    <nav className="flex-1">
+                        <ul className="space-y-6">
+                            {navMenu.map((item, index) => (
+                                <li key={index} className="flex justify-center">
+                                    {item.disable ? (
+                                        <button
+                                            disabled
+                                            className="flex flex-col justify-center items-center p-2 w-full  text-gray-100 bg-gray-100/50 cursor-not-allowed rounded-lg"
+                                        >
+                                            {item.icon}
+                                            <span className="text-sm mt-2">{item.name}</span>
+                                        </button>
+                                    ) : (
+                                        <NavLink
+                                            to={item.href}
+                                            className={({ isActive }) =>
+                                                [
+                                                    isActive ? " text-white bg-gray-100/50 " : "hover:bg-gray-50/40 text-gray-200 scale-95",
+                                                    "flex flex-col justify-center items-center p-3 w-full rounded-lg transition-all duration-200 scale-95"
+                                                ].join(" ")
+                                            }
+                                        >
+                                            {item.icon}
+                                            <span className="text-sm mt-2">{item.name}</span>
+                                        </NavLink>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+
+                    {/* Bottom Action Buttons */}
+                    <div>
+                        <button
+                            onClick={handleScreen}
+                            className="flex flex-col justify-center items-center p-2 mb-3 w-full bg-blue-700 hover:bg-blue-600 rounded-lg transition-all duration-200"
                         >
-                            <svg
-                                className="flex-shrink-0 w-10 h-10 text-gray-300  transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 18 18"
-                            >
-                                <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d={fullScreen ? "M3 3h8v2H5v6H3V3Zm10 18v-2h6v-6h2v8h-8Zm-8 0v-8h2v6h6v2H5ZM21 3v8h-2V5h-6V3h8Z" : "M7 7H5v2H3V5h4v2Zm10 10h2v-2h2v4h-4v-2ZM7 17v2H3v-4h2v2h2Zm14-8V5h-4v2h2v2h2Z"} />
                             </svg>
-                            <span className="flex-1  text-gray-500  whitespace-nowrap ">
-                                POS
-                            </span>
-                            <span //classname=inline-flex 
-                            className="hidden items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
-                                Pro
-                            </span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link 
-                           to={'/posc'}
-                            className="flex flex-col justify-center items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                            <span className="mt-2 text-sm hidden lg:block">{fullScreen ? "Exit Fullscreen" : "Enter Fullscreen"}</span>
+                        </button>
+                        <button
+                            onClick={handleSignout}
+                            className="flex flex-col justify-center items-center p-2 w-full bg-red-600 hover:bg-red-500 rounded-lg transition-all duration-200"
                         >
-                            <svg
-                                className="flex-shrink-0 w-10 h-10 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z" />
-                            </svg>
-                            <span className="flex-1  text-gray-500  whitespace-nowrap ">
-                                Inbox
-                            </span>
-                            <span className="hidden inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                3
-                            </span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            to="user"
-                            className="flex flex-col justify-center items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        >
-                            <svg
-                                className="flex-shrink-0 w-10 h-10 text-gray-500  transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 20 18"
-                            >
-                                <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
-                            </svg>
-                            <span className="flex-1  text-gray-500  whitespace-nowrap ">
-                                Users
-                            </span>
-                        </Link>
-                    </li>
-                    <li>
-                        <a
-                            href="#"
-                            className="flex flex-col justify-center items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        >
-                            <svg
-                                className="flex-shrink-0 w-10 h-10 text-gray-500  transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 18 20"
-                            >
-                                <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
-                            </svg>
-                            <span className="flex-1  text-gray-500  whitespace-nowrap ">
-                                Products
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-                <ul className="space-y-2 font-medium">
-                    <li>
-                        <a
-                            href="#"
-                            className="flex flex-col justify-center items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                        >
-                            <svg
-                                className="flex-shrink-0 w-10 h-10 text-gray-500  transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 18 16"
-                            >
+                            <svg className="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
                                 <path
                                     stroke="currentColor"
                                     strokeLinecap="round"
@@ -148,15 +120,13 @@ function SideNav({ }: Props) {
                                     d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
                                 />
                             </svg>
-                            <span className="flex-1  text-gray-500  whitespace-nowrap ">
-                                Sign In
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </aside>
-    );
+                            <span className="mt-2 text-sm hidden lg:block">Sign Out</span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+        </>
+    )
 }
 
 export default SideNav;
