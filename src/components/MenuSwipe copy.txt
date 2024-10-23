@@ -1,0 +1,67 @@
+import React from 'react'
+
+type Props = { tailwindColors: string[] }
+
+function MenuSwipe({ tailwindColors }: Props) {
+    return (
+        <>
+            {/* category */}
+            <div className='max-h-16 h-full w-full bg-slate-400 p-2'>
+                <div className='w-full h-full bg-green-100 flex gap-x-3 justify-start'>
+                    {tailwindColors.map((color, index) => (
+                        <div
+                            ref={el => colorRefs.current[index] = el}
+                            onClick={() => setSelectedCategory(color)}
+                            key={index}
+                            className="bg-white w-full h-full p-1">
+                            <div className={`${color} w-full h-full ${color === selectedCategory ? '-translate-y-2' : ""}`}>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            {/* <div className='max-h-16 h-full w-full  bg-slate-400 p-2'>
+                        <div className='w-full h-full bg-green-100 flex gap-x-3 justify-start'>
+                            {tailwindColors.map((color, index) => (
+                                <div onClick={() => setSelectedCategory(color)} key={index} className="bg-white w-full h-full p-1">
+                                    <div className={`${color} w-full h-full ${color === selectedCategory ? '-translate-y-2' : ""}`}>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                    </div> */}
+
+            {/* end category */}
+
+
+
+            {/* 
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                     */}
+
+            {/* <MenuSwiper /> */}
+
+            <div className='w-full bg-red-50 h-full p-2'>
+
+
+                <div onTouchEnd={() => { }} className='bg-indigo-300 w-full h-full rounded-md flex flex-nowrap overflow-x-scroll p-5 '>
+                    {tailwindColors.map((c, i) => (
+                        <div key={i} className={'min-w-full  overflow-y-scroll ' + c}>
+
+                            <div className='w-full h-full '>
+                            </div>
+                            <div className='w-full h-full bg-black'>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+            </div>
+            {/* <End MenuSwiper /> */}
+
+        </>
+    )
+}
+
+export default MenuSwipe

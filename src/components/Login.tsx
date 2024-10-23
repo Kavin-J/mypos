@@ -1,8 +1,8 @@
 import React, { FormEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../app/store'
-import { login, logout, } from '../../app/features/auth/authSlice'
 import { Navigate } from 'react-router'
+import { login, logout } from '../app/features/auth/authSlice'
+import { RootState, AppDispatch } from '../app/store'
 
 type Props = {}
 

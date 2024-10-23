@@ -1,9 +1,10 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
     content: ["./src/**/*.{js,jsx,ts,tsx}"],
     theme: {
         extend: {
-            colors: { 
+            colors: {
                 defalt: '#f1f5f9', // สีพื้นหลัง default
                 parimary: {
                     50: "#e6f0ff",
@@ -18,6 +19,7 @@ module.exports = {
                     900: "#102e46",
                 },
             },
+           
         },
     },
     plugins: [require('tailwind-scrollbar')],
