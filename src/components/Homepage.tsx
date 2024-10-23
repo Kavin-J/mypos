@@ -36,7 +36,7 @@ function Homepage({ }: Props) {
 
 
     return (
-        <div className="mx-auto w-full h-full bg-defalt   pb-3">
+        <div className="mx-auto w-full h-full bg-defalt   pb-2">
 
 
 
